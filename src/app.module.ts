@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { ToursModule } from './tours/tours.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      'mongodb+srv://shahpunkuz95:6Qv4huF0fBlOd5K3@cluster0.655qv.mongodb.net/natours?retryWrites=true&w=majority&appName=Cluster0',
+      `mongodb+srv://shahpunkuz95:${process.env.DB_PASSWORD}@cluster0.655qv.mongodb.net/natours?retryWrites=true&w=majority&appName=Cluster0`,
     ),
     ToursModule,
+    UsersModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

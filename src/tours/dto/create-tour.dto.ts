@@ -71,5 +71,5 @@ export class CreateTourDto {
   startDates?: string[];
 
   @IsOptional()
-  total?: number;
+  total?: number
 }

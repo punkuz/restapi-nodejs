@@ -21,7 +21,6 @@ export default class SearchFilter<T> {
     const searchQuery: FilterQuery<T> = {};
 
     if (queryObj.searchField && queryObj.q) {
-      console.log(queryObj);
       const searchField = queryObj.searchField as keyof T;
       const searchTerm = queryObj.q as string;
 

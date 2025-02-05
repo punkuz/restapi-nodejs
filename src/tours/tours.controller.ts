@@ -7,10 +7,11 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ToursService } from './tours.service';
-// import { CreateTourDto } from './dto/create-tour.dto';
 import { Tour } from './schema/tour.schema';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('api/v1/tours')
 export class ToursController {
@@ -22,6 +23,7 @@ export class ToursController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   getAllTours(@Query() query: Record<string, any>) {
     return this.tourService.getAllTours(query);
   }
