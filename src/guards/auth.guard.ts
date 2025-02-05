@@ -25,8 +25,6 @@ export class AuthGuard implements CanActivate {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('inside guard');
-
     const req = context.switchToHttp().getRequest<AuthRequest>();
     const authorization = req.headers?.authorization;
     let token: string | null = null;

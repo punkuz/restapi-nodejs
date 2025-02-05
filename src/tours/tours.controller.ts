@@ -13,7 +13,7 @@ import { ToursService } from './tours.service';
 import { Tour } from './schema/tour.schema';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('api/v1/tours')
+@Controller('tours')
 export class ToursController {
   constructor(private readonly tourService: ToursService) {}
 

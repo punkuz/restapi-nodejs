@@ -5,6 +5,8 @@ import { User } from './schema/user.schema';
 import { createSendToken } from '../util/jwt-token';
 import { AuthRequest } from 'src/guards/auth.guard';
 import { UpdatePasswordDto } from './dto/updates-password.dto';
+import { LoginDto } from './dto/login.dto';
+import { UserInterface } from 'src/types/user.types';
 
 @Injectable()
 export class UsersService {
@@ -27,6 +29,39 @@ export class UsersService {
   }
 
   /* 
+    @desc Post Login
+    @route POST /api/v1/users/login
+    @access private
+**/
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+
+    // 1) Check if email and password exist
+    if (!email || !password) {
+      throw new BadRequestException('Please provide email and password!');
+    }
+    // 2) Check if user exists && password is correct
+    const user = await this.userModel.findOne({ email }).select('+password');
+
+    if (
+      !user ||
+      !(await (user as unknown as UserInterface).correctPassword(
+        password,
+        user.password,
+      ))
+    ) {
+      throw new BadRequestException('Incorrect email or password');
+    }
+
+    //update last login
+    user.lastLogin = Date.now() as unknown as Date;
+    await user.save({ validateBeforeSave: false });
+
+    // 3) If everything ok, send token to client
+    return createSendToken(user);
+  }
+
+  /* 
     @desc Update user password
     @route /api/v1/user/updatemypassword
     @access private
@@ -43,8 +78,7 @@ export class UsersService {
 
     // 2) Check if provided current password is correct
     if (
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      !(await (user as any).correctPassword(
+      !(await (user as unknown as UserInterface).correctPassword(
         body.currentPassword,
         user.password,
       ))

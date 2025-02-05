@@ -11,8 +11,9 @@ import { UsersService } from './users.service';
 import { User } from './schema/user.schema';
 import { UpdatePasswordDto } from './dto/updates-password.dto';
 import { AuthGuard, AuthRequest } from 'src/guards/auth.guard';
+import { LoginDto } from './dto/login.dto';
 
-@Controller('api/v1/users')
+@Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -28,5 +29,10 @@ export class UsersController {
     @Request() req: AuthRequest,
   ) {
     return this.userService.updatePassword(updatePasswordDto, req);
+  }
+
+  @Post('login')
+  login(@Body() loginDto: LoginDto) {
+    return this.userService.login(loginDto);
   }
 }
