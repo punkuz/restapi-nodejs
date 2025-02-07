@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     let token: string | null = null;
 
     // Extract token from header or cookie
-    if (authorization && authorization.startsWith('Bearer ')) {
+    if (authorization?.startsWith('Bearer ')) {
       token = authorization.split(' ')[1];
     } else if (req.cookies?.jwt) {
       token = req.cookies.jwt;

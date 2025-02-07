@@ -12,6 +12,9 @@ import {
 import { ToursService } from './tours.service';
 import { Tour } from './schema/tour.schema';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/role.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/types/role.enum';
 
 @Controller('tours')
 export class ToursController {
@@ -23,6 +26,8 @@ export class ToursController {
   }
 
   @Get()
+  @Roles(Role.User, Role.Admin)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   getAllTours(@Query() query: Record<string, any>) {
     return this.tourService.getAllTours(query);
