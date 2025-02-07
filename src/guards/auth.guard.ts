@@ -6,10 +6,12 @@ import * as jwt from 'jsonwebtoken';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -53,7 +55,7 @@ export class AuthGuard implements CanActivate {
       });
 
       if (!user) {
-        throw new ForbiddenException(
+        throw new NotFoundException(
           'This user account is deactivated or does not exist.',
         );
       }
@@ -61,7 +63,9 @@ export class AuthGuard implements CanActivate {
       req.user = user;
       return true;
     } catch (error) {
-      throw new UnauthorizedException('Invalid or expired token.');
+      console.log('err', error);
+
+      throw new BadRequestException('Invalid or expired token.');
     }
   }
 }

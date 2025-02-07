@@ -94,4 +94,8 @@ export class UsersService {
     // 4) Log user in, send JWT
     return createSendToken(user);
   }
+
+  async getAllUsers(): Promise<User[]> {
+    return this.userModel.find();
+  }
 }

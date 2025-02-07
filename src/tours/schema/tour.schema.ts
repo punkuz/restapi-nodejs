@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document, Model, Query } from 'mongoose';
+import { User } from 'src/users/schema/user.schema';
 
 @Schema({
   timestamps: true,
@@ -55,11 +56,19 @@ export class Tour extends Document {
   @Prop([Date])
   startDates: Date[];
 
-  // Virtual field (not stored in DB)
-  get durationWeeks(): number {
-    return this.duration ? this.duration / 7 : 0;
-  }
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+  guides: User[];
 }
 
 // Generate Schema
 export const TourSchema = SchemaFactory.createForClass(Tour);
+
+TourSchema.pre(/^find/, function (this: Query<Document<Tour>, Tour>, next) {
+  this.populate({ path: 'guides', select: '-__v' });
+  next();
+});
+
+TourSchema.virtual('durationWeeks').get(function (this: Tour) {
+  // Important for type safety
+  return this.duration ? this.duration / 7 : undefined;
+});

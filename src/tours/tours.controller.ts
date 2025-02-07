@@ -21,6 +21,9 @@ export class ToursController {
   constructor(private readonly tourService: ToursService) {}
 
   @Post()
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   createTour(@Body() tour: Tour) {
     return this.tourService.createTour(tour);
   }
@@ -34,6 +37,9 @@ export class ToursController {
   }
 
   @Get(':id')
+  @Roles(Role.User, Role.Admin)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   getTour(@Param('id') id: string) {
     return this.tourService.getTour(id);
   }

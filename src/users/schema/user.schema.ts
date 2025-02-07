@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import validator from 'validator';
 import { Document } from 'mongoose';
+import { Role } from 'src/types/role.enum';
 
 @Schema({
   timestamps: true,
@@ -36,7 +37,7 @@ export class User extends Document {
   email: string;
 
   @Prop({
-    enum: ['user', 'admin'],
+    enum: Role,
     required: [true, 'Please provide a role'],
     default: 'user',
   })
@@ -73,6 +74,9 @@ export class User extends Document {
 
   @Prop()
   lastLogin: Date;
+
+  @Prop({ type: Boolean, default: true })
+  isActive: boolean;
 }
 
 // Generate Schema
@@ -81,7 +85,6 @@ export const UserSchema = SchemaFactory.createForClass(User);
 UserSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
-  console.log('are we here', this);
 
   try {
     // Hash the password with cost of 12

@@ -39,11 +39,11 @@ export class UsersController {
     return this.userService.login(loginDto);
   }
 
-  @Get('test')
-  @Roles(Role.Admin, Role.User)
+  @Get('listusers')
+  @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
-  testroute() {
-    return 'you reached here';
+  getAllUsers() {
+    return this.userService.getAllUsers();
   }
 }
