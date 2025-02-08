@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, Model, Query } from 'mongoose';
+import mongoose, { Document, Query } from 'mongoose';
 import { User } from 'src/users/schema/user.schema';
 
 @Schema({
@@ -71,4 +71,11 @@ TourSchema.pre(/^find/, function (this: Query<Document<Tour>, Tour>, next) {
 TourSchema.virtual('durationWeeks').get(function (this: Tour) {
   // Important for type safety
   return this.duration ? this.duration / 7 : undefined;
+});
+
+//virtuaal populate
+TourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 });

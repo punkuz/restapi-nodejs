@@ -3,6 +3,7 @@ import { ToursModule } from './tours/tours.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     ),
     ToursModule,
     UsersModule,
+    ReviewsModule,
   ],
   controllers: [],
   providers: [],
