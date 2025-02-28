@@ -73,7 +73,7 @@ TourSchema.virtual('durationWeeks').get(function (this: Tour) {
   return this.duration ? this.duration / 7 : undefined;
 });
 
-//virtuaal populate
+//virtual populate
 TourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',
